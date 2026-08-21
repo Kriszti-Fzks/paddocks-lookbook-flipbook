@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Paddocks Lookbook</title>
-    <!-- Load the page-flip library from CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/page-flip@latest/dist/page-flip.browser.min.js"></script>
     <style>
         body {
             margin: 0;
@@ -31,6 +29,9 @@
             box-shadow: 0 20px 60px rgba(0,0,0,0.8);
             background: #fff;
             border-radius: 4px;
+            max-width: 800px;
+            width: 100%;
+            aspect-ratio: 16 / 9;
         }
         /* Style individual pages */
         .page {
@@ -94,19 +95,7 @@
 
     <div class="container">
         <!-- Flipbook container -->
-        <div id="flipbook">
-            <div class="page"><img src="The_Paddocks_Lookbook_Page_01.jpg" alt="Page 1"></div>
-            <div class="page"><img src="The_Paddocks_Lookbook_Page_02.jpg" alt="Page 2"></div>
-            <div class="page"><img src="The_Paddocks_Lookbook_Page_03.jpg" alt="Page 3"></div>
-            <div class="page"><img src="The_Paddocks_Lookbook_Page_04.jpg" alt="Page 4"></div>
-            <div class="page"><img src="The_Paddocks_Lookbook_Page_05.jpg" alt="Page 5"></div>
-            <div class="page"><img src="The_Paddocks_Lookbook_Page_06.jpg" alt="Page 6"></div>
-            <div class="page"><img src="The_Paddocks_Lookbook_Page_07.jpg" alt="Page 7"></div>
-            <div class="page"><img src="The_Paddocks_Lookbook_Page_08.jpg" alt="Page 8"></div>
-            <div class="page"><img src="The_Paddocks_Lookbook_Page_09.jpg" alt="Page 9"></div>
-            <div class="page"><img src="The_Paddocks_Lookbook_Page_10.jpg" alt="Page 10"></div>
-            <div class="page"><img src="The_Paddocks_Lookbook_Page_11.jpg" alt="Page 11"></div>
-        </div>
+        <div id="flipbook"></div>
 
         <!-- Page counter -->
         <div class="page-counter">
@@ -116,49 +105,58 @@
 
     <!-- Navigation Controls -->
     <div class="controls">
-        <button id="prev-btn" onclick="pageFlip.flipPrev()">← Previous</button>
-        <button id="next-btn" onclick="pageFlip.flipNext()">Next →</button>
+        <button id="prev-btn" onclick="flipPrev()">← Previous</button>
+        <button id="next-btn" onclick="flipNext()">Next →</button>
     </div>
 
     <script>
-        let pageFlip;
+        let currentPage = 0;
+        const pages = [
+            "The_Paddocks_Lookbook_Page_01.jpg",
+            "The_Paddocks_Lookbook_Page_02.jpg",
+            "The_Paddocks_Lookbook_Page_03.jpg",
+            "The_Paddocks_Lookbook_Page_04.jpg",
+            "The_Paddocks_Lookbook_Page_05.jpg",
+            "The_Paddocks_Lookbook_Page_06.jpg",
+            "The_Paddocks_Lookbook_Page_07.jpg",
+            "The_Paddocks_Lookbook_Page_08.jpg",
+            "The_Paddocks_Lookbook_Page_09.jpg",
+            "The_Paddocks_Lookbook_Page_10.jpg",
+            "The_Paddocks_Lookbook_Page_11.jpg"
+        ];
+
+        function showPage(index) {
+            if (index < 0 || index >= pages.length) return;
+            currentPage = index;
+
+            const flipbook = document.getElementById("flipbook");
+            flipbook.innerHTML = `<div class="page"><img src="${pages[currentPage]}" alt="Page ${currentPage + 1}"></div>`;
+
+            document.getElementById("current-page").textContent = currentPage + 1;
+            document.getElementById("prev-btn").disabled = currentPage === 0;
+            document.getElementById("next-btn").disabled = currentPage === pages.length - 1;
+        }
+
+        function flipNext() {
+            if (currentPage < pages.length - 1) {
+                showPage(currentPage + 1);
+            }
+        }
+
+        function flipPrev() {
+            if (currentPage > 0) {
+                showPage(currentPage - 1);
+            }
+        }
 
         document.addEventListener("DOMContentLoaded", function() {
-            // Initialize the PageFlip
-            pageFlip = new PageFlip(document.getElementById("flipbook"), {
-                width: 500,
-                height: 700,
-                size: "stretch",
-                minWidth: 320,
-                maxWidth: 1200,
-                minHeight: 450,
-                maxHeight: 1680,
-                drawShadow: true,
-                flipped: false,
-                showCover: true,
-                useMouseEvents: true,
-                disableFlip: false,
-                startZIndex: 0,
-                autoSize: true
+            showPage(0);
+
+            // Keyboard navigation
+            document.addEventListener("keydown", function(e) {
+                if (e.key === "ArrowRight") flipNext();
+                if (e.key === "ArrowLeft") flipPrev();
             });
-
-            // Load pages from HTML elements
-            pageFlip.loadFromHTML(document.querySelectorAll(".page"));
-
-            // Update page counter
-            function updatePageCounter() {
-                document.getElementById("current-page").textContent = pageFlip.getCurrentPageIndex() + 1;
-                document.getElementById("prev-btn").disabled = pageFlip.getCurrentPageIndex() === 0;
-                document.getElementById("next-btn").disabled = pageFlip.getCurrentPageIndex() === pageFlip.getPageCount() - 1;
-            }
-
-            // Listen for page changes
-            pageFlip.on("flip", updatePageCounter);
-            pageFlip.on("changeOrientation", updatePageCounter);
-            pageFlip.on("init", updatePageCounter);
-
-            // Initial state
-            updatePageCounter();
         });
     </script>
 
