@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Paddocks Lookbook</title>
+    <!-- Load the page-flip library from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/page-flip@latest/dist/page-flip.browser.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+        }
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        /* Style the book container */
+        #flipbook {
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+            background: #fff;
+            border-radius: 4px;
+        }
+        /* Style individual pages */
+        .page {
+            padding: 0;
+            background-color: #fff;
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .page img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+        /* Controls */
+        .controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 100;
+        }
+        button {
+            padding: 12px 24px;
+            background-color: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid white;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        button:hover {
+            background-color: rgba(255,255,255,0.3);
+            transform: scale(1.05);
+        }
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: scale(1);
+        }
+        .page-counter {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: #666;
+            font-size: 14px;
+            background: rgba(255,255,255,0.9);
+            padding: 8px 16px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Flipbook container -->
+        <div id="flipbook">
+            <div class="page"><img src="The_Paddocks_Lookbook_Page_01.jpg" alt="Page 1"></div>
+            <div class="page"><img src="The_Paddocks_Lookbook_Page_02.jpg" alt="Page 2"></div>
+            <div class="page"><img src="The_Paddocks_Lookbook_Page_03.jpg" alt="Page 3"></div>
+            <div class="page"><img src="The_Paddocks_Lookbook_Page_04.jpg" alt="Page 4"></div>
+            <div class="page"><img src="The_Paddocks_Lookbook_Page_05.jpg" alt="Page 5"></div>
+            <div class="page"><img src="The_Paddocks_Lookbook_Page_06.jpg" alt="Page 6"></div>
+            <div class="page"><img src="The_Paddocks_Lookbook_Page_07.jpg" alt="Page 7"></div>
+            <div class="page"><img src="The_Paddocks_Lookbook_Page_08.jpg" alt="Page 8"></div>
+            <div class="page"><img src="The_Paddocks_Lookbook_Page_09.jpg" alt="Page 9"></div>
+            <div class="page"><img src="The_Paddocks_Lookbook_Page_10.jpg" alt="Page 10"></div>
+            <div class="page"><img src="The_Paddocks_Lookbook_Page_11.jpg" alt="Page 11"></div>
+        </div>
+
+        <!-- Page counter -->
+        <div class="page-counter">
+            <span id="current-page">1</span> / <span id="total-pages">11</span>
+        </div>
+    </div>
+
+    <!-- Navigation Controls -->
+    <div class="controls">
+        <button id="prev-btn" onclick="pageFlip.flipPrev()">← Previous</button>
+        <button id="next-btn" onclick="pageFlip.flipNext()">Next →</button>
+    </div>
+
+    <script>
+        let pageFlip;
+
+        document.addEventListener("DOMContentLoaded", function() {
+            // Initialize the PageFlip
+            pageFlip = new PageFlip(document.getElementById("flipbook"), {
+                width: 500,
+                height: 700,
+                size: "stretch",
+                minWidth: 320,
+                maxWidth: 1200,
+                minHeight: 450,
+                maxHeight: 1680,
+                drawShadow: true,
+                flipped: false,
+                showCover: true,
+                useMouseEvents: true,
+                disableFlip: false,
+                startZIndex: 0,
+                autoSize: true
+            });
+
+            // Load pages from HTML elements
+            pageFlip.loadFromHTML(document.querySelectorAll(".page"));
+
+            // Update page counter
+            function updatePageCounter() {
+                document.getElementById("current-page").textContent = pageFlip.getCurrentPageIndex() + 1;
+                document.getElementById("prev-btn").disabled = pageFlip.getCurrentPageIndex() === 0;
+                document.getElementById("next-btn").disabled = pageFlip.getCurrentPageIndex() === pageFlip.getPageCount() - 1;
+            }
+
+            // Listen for page changes
+            pageFlip.on("flip", updatePageCounter);
+            pageFlip.on("changeOrientation", updatePageCounter);
+            pageFlip.on("init", updatePageCounter);
+
+            // Initial state
+            updatePageCounter();
+        });
+    </script>
+
+</body>
+</html>
