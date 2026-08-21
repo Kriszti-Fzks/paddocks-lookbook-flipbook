@@ -17,21 +17,22 @@
             overflow: hidden;
         }
         .container {
-            width: 100%;
-            max-width: 1200px;
+            width: 100vw;
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 0;
         }
         /* Style the book container */
         #flipbook {
             box-shadow: 0 20px 60px rgba(0,0,0,0.8);
             background: #fff;
-            border-radius: 4px;
-            max-width: 800px;
+            border-radius: 0;
             width: 100%;
-            aspect-ratio: 16 / 9;
+            height: 100%;
+            max-width: 100%;
+            max-height: 100%;
         }
         /* Style individual pages */
         .page {
