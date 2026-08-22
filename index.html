@@ -17,17 +17,18 @@
             align-items: center;
             min-height: 100vh;
             font-family: sans-serif;
-            overflow: hidden;
+            overflow: auto;
         }
         .container {
             width: 100vw;
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             position: relative;
             gap: 40px;
-            padding: 40px 80px;
+            padding: 60px 80px;
         }
         #flipbook {
             width: 90%;
@@ -40,6 +41,8 @@
             position: relative;
             box-shadow: 0 20px 60px rgba(0,0,0,0.8);
             border-radius: 0;
+            margin-top: 60px;
+            margin-bottom: 60px;
         }
         .page {
             width: 100%;
